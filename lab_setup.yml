@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: no
+  collections:
+    - davidban77.gns3
+
+  tasks:
+    - name: Create the lab
+      import_role:
+        name: create_lab

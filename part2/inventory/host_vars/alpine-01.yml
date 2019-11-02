@@ -1,0 +1,4 @@
+---
+cloud_interface:
+    protocol: dhcp
+    interface: eth1

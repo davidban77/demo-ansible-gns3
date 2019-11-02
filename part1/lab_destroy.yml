@@ -1,0 +1,12 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+    gns3_url: http://dev_gns3server
+  collections:
+    - davidban77.gns3
+  tasks:
+    - name: Stop nodes and delete project
+      gns3_project:
+        url: "{{ gns3_url }}"
+        project_name: demo_lab
+        state: absent

@@ -1,0 +1,39 @@
+#### GNS3 Server settings
+gns3:
+    url: "http://dev_gns3server"
+    project_name: demo_lab_part2
+    lab_user: netops
+    lab_pass: netops123456
+    nodes_strategy: one_by_one
+
+    ### Nodes attributes and specifications
+    nodes_spec:
+        - name: iosvl2-1
+          template: "Cisco IOSvL2 15.2.1"
+        - name: iosvl3-1
+          template: "Cisco IOSvL2 15.2.1"
+        - name: veos-1
+          template: "vEOS-4.21.5F"
+        - name: iou-l2-1
+          template: "IOU-L2-15.1"
+        - name: alpine-01
+          template: "alpine"
+        - name: nat-1
+          template: "NAT"
+
+    ### Links mapping
+    links_spec:
+        - ["alpine-01", "eth0", "iosvl2-01", "Gi0/0"]
+        - ["alpine-01", "eth1", "nat-01", "nat0"]
+        - ["iosvl3-01", "Gi0/1", "iosvl2-01", "Gi0/1"]
+        - ["veos-01", "Management1", "iosvl2-01", "Gi0/2"]
+
+
+### Boiler plate configuration settings
+boiler_plate:
+    # `generate` or `deploy` the configuration
+    config: "generate"
+    # To either wait for user prompt to push config or just go ahead with it
+    # automated_push: yes
+    # autpmated_push_delay: 3
+

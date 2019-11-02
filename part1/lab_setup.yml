@@ -1,0 +1,45 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+    gns3_url: "http://dev_gns3server"
+    gns3_nodes_spec:
+      - name: iosvl2-01
+        template: "Cisco IOSvL2 15.2.1"
+      - name: iosvl3-01
+        template: "Cisco IOSv 15.7(3)M3"
+      - name: veos-01
+        template: "vEOS-4.21.5F"
+      - name: alpine-01
+        template: "alpine"
+      - name: nat-01
+        template: "NAT"
+    gns3_links_spec:
+      - ["alpine-01", "eth0", "iosvl2-01", "Gi0/0"]
+      - ["alpine-01", "eth1", "nat-01", "nat0"]
+      - ["iosvl3-01", "Gi0/1", "iosvl2-01", "Gi0/1"]
+      - ["veos-01", "Management1", "iosvl2-01", "Gi0/2"]
+  collections:
+    - davidban77.gns3
+  tasks:
+    - name: Verify version of GNS3 server
+      gns3_version:
+        url: "{{ gns3_url }}"
+      register: version
+
+    - debug: var=version
+
+    # - name: Create network topology
+    #   gns3_project:
+    #     url: "{{ gns3_url }}"
+    #     project_name: demo_lab
+    #     state: present
+    #     nodes_spec: "{{ gns3_nodes_spec }}"
+    #     links_spec: "{{ gns3_links_spec }}"
+
+    # - name: Start nodes
+    #   gns3_project:
+    #     url: "{{ gns3_url }}"
+    #     project_name: demo_lab
+    #     state: opened
+    #     nodes_state: started
+    #     nodes_strategy: one_by_one
