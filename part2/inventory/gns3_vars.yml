@@ -22,12 +22,12 @@ gns3_nodes_spec:
 gns3_links_spec:
     - ["alpine-01", "eth0", "iosvl2-01", "Gi0/0"]
     - ["alpine-01", "eth1", "nat-01", "nat0"]
-    - ["iosvl3-01", "Gi0/1", "iosvl2-01", "Gi0/1"]
+    - ["iosvl3-01", "Gi0/0", "iosvl2-01", "Gi0/1"]
     - ["veos-01", "Management1", "iosvl2-01", "Gi0/2"]
 
 
-### Boiler plate configuration settings
-boiler_plate:
+### Boilerplate configuration settings
+boilerplate:
     # `generate` or `deploy` the configuration
     config: "deploy"
     # Flag used when config is set to `deploy`. When `no` it will prompt the user for
