@@ -28,18 +28,18 @@
 
     - debug: var=version
 
-    # - name: Create network topology
-    #   gns3_project:
-    #     url: "{{ gns3_url }}"
-    #     project_name: demo_lab
-    #     state: present
-    #     nodes_spec: "{{ gns3_nodes_spec }}"
-    #     links_spec: "{{ gns3_links_spec }}"
+    - name: Create network topology
+      gns3_project:
+        url: "{{ gns3_url }}"
+        project_name: demo_lab_part1
+        state: present
+        nodes_spec: "{{ gns3_nodes_spec }}"
+        links_spec: "{{ gns3_links_spec }}"
 
-    # - name: Start nodes
-    #   gns3_project:
-    #     url: "{{ gns3_url }}"
-    #     project_name: demo_lab
-    #     state: opened
-    #     nodes_state: started
-    #     nodes_strategy: one_by_one
+    - name: Start nodes
+      gns3_project:
+        url: "{{ gns3_url }}"
+        project_name: demo_lab_part1
+        state: opened
+        nodes_state: started
+        nodes_strategy: one_by_one
