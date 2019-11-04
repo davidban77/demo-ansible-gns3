@@ -7,7 +7,7 @@ This ansible workspace is used to setup a basic GNS3 topology with boiler plate 
 - Cisco IOSvL2
 - Cisco IOSvL3
 - Arista vEOS
-- ALpine docker host
+- Alpine docker host
 - NAT cloud
 
 **NOTE:** You must be under this directory to be able to run the commands
