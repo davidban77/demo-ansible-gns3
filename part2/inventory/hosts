@@ -1,12 +1,10 @@
-[ios]
+[network]
 iosvl2-01  mgmt_ip=10.0.0.11/24  mgmt_interface=Ethernet0/0  ansible_net_os="ios"
 iosvl3-01  mgmt_ip=10.0.0.12/24  mgmt_interface=Ethernet/0   ansible_net_os="ios"
-
-[eos]
 veos-01    mgmt_ip=10.0.0.13/24  mgmt_interface=Management1  ansible_net_os="eos"
 
-[alpine]
-alpine-01    mgmt_ip=10.0.0.14/24  mgmt_interface=eth0       ansible_net_os="alpine"
+[hosts]
+alpine-01  mgmt_ip=10.0.0.14/24  mgmt_interface=eth0         ansible_net_os="alpine"
 
-[nat]
-nat-1
+[edge]
+nat-1      ansible_net_os="gns3_builtin"

@@ -1,0 +1,12 @@
+configure terminal
+hostname {{ inventory_hostname }}
+ip routing
+username {{ gns3_lab_user }} privilege 15 role network-admin secret {{ gns3_lab_pass }}
+management api http-commands
+protocol https
+no shutdown
+interface {{ mgmt_interface }}
+ip address {{ mgmt_ip }}
+no shutdown
+exit
+exit

@@ -1,0 +1,19 @@
+auto {{ mgmt_interface }}
+iface {{ mgmt_interface }} inet static
+  address {{ mgmt_ip | ipaddr('address') }}
+  netmask {{ mgmt_ip | ipaddr('netmask') }}
+
+{% if cloud_interface is defined %}
+auto {{ cloud_interface.interface }}
+iface {{ cloud_interface.interface }} inet {{ cloud_interface.protocol }}
+{% if cloud_interface.ip is defined %}
+  address {{ cloud_interface.ip | ipaddr('address') }}
+  netmask {{ cloud_interface.ip | ipaddr('netmask') }}
+{% if cloud_interface.gw is defined %}
+  gateway {{ cloud_interface.gw }}
+{% endif %}
+{% if cloud_interface.dns is defined %}
+  up echo nameserver {{ cloud_interface.dns }} > /etc/resolv.conf
+{% endif %}
+{% endif %}
+{% endif %}
