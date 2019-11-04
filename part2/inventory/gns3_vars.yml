@@ -29,9 +29,9 @@ gns3_links_spec:
 ### Boiler plate configuration settings
 boiler_plate:
     # `generate` or `deploy` the configuration
-    config: "generate"
+    config: "deploy"
     # Flag used when config is set to `deploy`. When `no` it will prompt the user for
     # confirmation, when set to `yes` it will wait the minuites set in `automated_push_delay`
-    automated_push: no
+    automated_push: "yes"
     automated_push_delay: 3
 
