@@ -1,0 +1,10 @@
+---
+interfaces:
+    - interface: eth0
+      protocol: static
+      ip: 192.168.0.3/24
+    - interface: eth1
+      protocol: static
+      ip: 10.19.92.100/24
+      gw: 10.19.92.1
+      dns: 10.19.92.1

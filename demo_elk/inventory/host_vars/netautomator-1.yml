@@ -1,0 +1,10 @@
+---
+interfaces:
+    - interface: eth0
+      protocol: static
+      ip: 192.168.0.1/24
+    - interface: eth1
+      protocol: dhcp
+    - interface: eth2
+      protocol: static
+      ip: 10.70.70.44/24

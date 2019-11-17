@@ -1,0 +1,72 @@
+#### GNS3 Server settings
+gns3_url: "http://dev_gns3server"
+gns3_project_name: elk_demo_auto
+gns3_lab_user: netops
+gns3_lab_pass: netops123456
+gns3_nodes_strategy: all
+
+### Nodes attributes and specifications
+gns3_nodes_spec:
+    - name: iosv-1
+      template: "Cisco IOSv 15.7(3)M3"
+    - name: iosv-2
+      template: "Cisco IOSv 15.7(3)M3"
+    - name: iosv-3
+      template: "Cisco IOSv 15.7(3)M3"
+    - name: veos-1
+      template: "Arista vEOS 4.21.5F"
+    - name: veos-2
+      template: "Arista vEOS 4.21.5F"
+    - name: veos-3
+      template: "Arista vEOS 4.21.5F"
+    - name: netautomator-1
+      template: "netautomator"
+    - name: logstash-1
+      template: "davidban77-logstash"
+    - name: kibana-1
+      template: "kibana"
+    - name: elasticsearch-1
+      template: "elasticsearch"
+    - name: nat-1
+      template: "NAT"
+    - name: cloud-1
+      template: "Cloud"
+    - name: switch-1
+      template: "Ethernet switch"
+    - name: switch-2
+      template: "Ethernet switch"
+
+### Links mapping
+gns3_links_spec:
+    - ["elasticsearch-1", "eth0", "switch-1", "Ethernet0"]
+    - ["kibana-1", "eth0", "switch-1", "Ethernet2"]
+    - ["kibana-1", "eth1", "cloud-1", "eth1"]
+    - ["logstash-1", "eth0", "switch-1", "Ethernet1"]
+    - ["logstash-1", "eth1", "switch-2", "Ethernet7"]
+    - ["netautomator-1", "eth0", "switch-1", "Ethernet3"]
+    - ["netautomator-1", "eth1", "nat-1", "nat0"]
+    - ["netautomator-1", "eth2", "switch-2", "Ethernet6"]
+    - ["iosv-1", "Gi0/0", "switch-2", "Ethernet0"]
+    - ["iosv-1", "Gi0/1", "iosv-3", "Gi0/2"]
+    - ["iosv-1", "Gi0/2", "iosv-2", "Gi0/2"]
+    - ["iosv-1", "Gi0/3", "veos-1", "Ethernet3"]
+    - ["iosv-2", "Gi0/0", "switch-2", "Ethernet1"]
+    - ["iosv-2", "Gi0/1", "iosv-3", "Gi0/1"]
+    - ["iosv-2", "Gi0/3", "veos-2", "Ethernet3"]
+    - ["iosv-3", "Gi0/0", "switch-2", "Ethernet2"]
+    - ["veos-1", "Management1", "switch-2", "Ethernet4"]
+    - ["veos-1", "Ethernet1", "veos-3", "Ethernet2"]
+    - ["veos-1", "Ethernet2", "veos-2", "Ethernet2"]
+    - ["veos-2", "Management1", "switch-2", "Ethernet3"]
+    - ["veos-2", "Ethernet1", "veos-3", "Ethernet1"]
+    - ["veos-3", "Management1", "switch-2", "Ethernet5"]
+
+### Boilerplate configuration settings
+boilerplate:
+    # `generate` or `deploy` the configuration
+    config: "generate"
+    # Flag used when config is set to `deploy`. When `no` it will prompt the user for
+    # confirmation, when set to `yes` it will wait the minuites set in `automated_push_delay`
+    automated_push: "yes"
+    automated_push_delay: 2
+

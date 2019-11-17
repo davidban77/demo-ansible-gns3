@@ -1,0 +1,18 @@
+{% for interface in interfaces %}
+
+{% if interface is defined %}
+auto {{ interface.interface }}
+iface {{ interface.interface }} inet {{ interface.protocol }}
+{% if interface.ip is defined %}
+  address {{ interface.ip | ipaddr('address') }}
+  netmask {{ interface.ip | ipaddr('netmask') }}
+{% if interface.gw is defined %}
+  gateway {{ interface.gw }}
+{%- endif %}
+{% if interface.dns is defined %}
+  up echo nameserver {{ interface.dns }} > /etc/resolv.conf
+{%- endif %}
+{%- endif %}
+{%- endif %}
+
+{% endfor %}
