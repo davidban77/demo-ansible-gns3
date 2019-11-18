@@ -67,27 +67,6 @@
             boilerplate_config: "{{ lookup('template', 'templates/{{ ansible_net_os }}.j2') }}"
 
         - name: "Push config"
-          when: ansible_net_os == "ios" and image_style == "iosv_l2"
-          gns3_telnet_console:
-            remote_addr: "{{ nodes_inventory[inventory_hostname]['server'] }}"
-            port: "{{ nodes_inventory[inventory_hostname]['console_port'] }}"
-            send_newline: yes
-            login_prompt:
-              - ">"
-            user: ""
-            password: ""
-            prompts:
-              - "[#]"
-            command: "{{ boilerplate_config.splitlines() }}"
-            pause: 1
-            timeout:
-              general: 180
-              pre_login: 60
-              post_login: 60
-              login_prompt: 30
-              config_dialog: 30
-
-        - name: "Push config"
           when: ansible_net_os == "ios" and image_style == "iosv_l3"
           gns3_telnet_console:
             remote_addr: "{{ nodes_inventory[inventory_hostname]['server'] }}"
@@ -120,7 +99,7 @@
               login_prompt: 30
               config_dialog: 30
 
-        - name: "Push config to docker image"
+        - name: "Push network config to docker image"
           when: ansible_net_os == "linux"
           davidban77.gns3.gns3_node_file:
             url: "{{ gns3_url }}"
@@ -129,6 +108,16 @@
             state: present
             dest: /etc/network/interfaces
             data: "{{ boilerplate_config }}"
+
+        - name: "Push hosts file to docker image"
+          when: ansible_net_os == "linux"
+          davidban77.gns3.gns3_node_file:
+            url: "{{ gns3_url }}"
+            project_name: "{{ gns3_project_name }}"
+            node_name: "{{ inventory_hostname }}"
+            state: present
+            dest: /etc/hosts
+            data: "{{ lookup('file', 'extra/hosts_file.conf') }}"
 
         - name: "Reboot linux-style hosts to apply changes"
           when: ansible_net_os == "linux"
