@@ -1,0 +1,133 @@
+# Play to setup GNS3 project and nodes, it retrieves their console information
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - inventory/gns3_vars.yml
+  collections:
+    - davidban77.gns3
+
+  tasks:
+    - name: Lab creation and setup
+      block:
+        - import_role:
+            name: create_lab
+
+        - name: Collect the nodes inventory
+          gns3_nodes_inventory:
+            url: "{{ gns3_url }}"
+            project_name: "{{ gns3_project_name }}"
+          register: nodes_inventory
+
+        # - debug: var=nodes_inventory
+
+    - name: Pause section
+      when: boilerplate.config == "deploy" and boilerplate.automated_push == "no"
+      pause:
+        prompt: "Press Enter to proceed with configuration deployments:"
+
+    - name: Pause section
+      when: boilerplate.config == "deploy" and boilerplate.automated_push == "yes"
+      pause:
+        minutes: "{{ boilerplate.automated_push_delay | default(3) }}"
+
+# Play that goes through the inventory devices to generate/push boiler plate config
+- hosts: all
+  gather_facts: no
+  vars:
+     ansible_connection: local
+     ansible_python_interpreter: "{{ansible_playbook_python}}"
+  vars_files:
+    - inventory/gns3_vars.yml
+  collections:
+    - davidban77.gns3
+
+  tasks:
+    - name: Retrieving nodes inventory information
+      set_fact:
+        nodes_inventory: "{{ hostvars['localhost']['nodes_inventory']['nodes_inventory'] }}"
+
+    - name: Generate boilerplate config files
+      when: boilerplate.config == "generate" and ansible_net_os != "gns3_builtin"
+      block:
+        - name: Create build folder
+          file:
+            path: "{{ playbook_dir }}/build"
+            state: directory
+
+        - name: Generate config
+          template:
+            src: templates/{{ ansible_net_os }}.j2
+            dest: "{{ playbook_dir }}/build/{{ inventory_hostname }}-{{ ansible_net_os }}.conf"
+
+        - debug:
+            msg: "{{ hostvars }}"
+
+    - name: Deploy boilerplate configuration
+      when: boilerplate.config == "deploy" and ansible_net_os != "gns3_builtin"
+      block:
+        - name: Generate configuration variable
+          set_fact:
+            boilerplate_config: "{{ lookup('template', 'templates/{{ ansible_net_os }}.j2') }}"
+
+        - name: "Push config"
+          when: ansible_net_os == "ios" and image_style == "iosv_l3"
+          gns3_telnet_console:
+            remote_addr: "{{ nodes_inventory[inventory_hostname]['server'] }}"
+            port: "{{ nodes_inventory[inventory_hostname]['console_port'] }}"
+            send_newline: yes
+            command: "{{ boilerplate_config.splitlines() }}"
+            pause: 1
+            timeout:
+              general: 180
+              pre_login: 60
+              post_login: 60
+              login_prompt: 30
+              config_dialog: 30
+
+        - name: "Push config"
+          when: ansible_net_os == "eos" and image_style == "veos"
+          gns3_telnet_console:
+            remote_addr: "{{ nodes_inventory[inventory_hostname]['server'] }}"
+            port: "{{ nodes_inventory[inventory_hostname]['console_port'] }}"
+            send_newline: yes
+            login_prompt:
+              - "login:"
+            user: "admin"
+            command: "{{ boilerplate_config.splitlines() }}"
+            pause: 1
+            post_login_action: eos_disable_ztp
+            timeout:
+              general: 300
+              pre_login: 60
+              login_prompt: 30
+              config_dialog: 30
+
+        - name: "Push network config to docker image"
+          when: ansible_net_os == "linux"
+          davidban77.gns3.gns3_node_file:
+            url: "{{ gns3_url }}"
+            project_name: "{{ gns3_project_name }}"
+            node_name: "{{ inventory_hostname }}"
+            state: present
+            dest: /etc/network/interfaces
+            data: "{{ boilerplate_config }}"
+
+        - name: "Push hosts file to docker image"
+          when: ansible_net_os == "linux"
+          davidban77.gns3.gns3_node_file:
+            url: "{{ gns3_url }}"
+            project_name: "{{ gns3_project_name }}"
+            node_name: "{{ inventory_hostname }}"
+            state: present
+            dest: /etc/hosts
+            data: "{{ lookup('file', 'extra/hosts_file.conf') }}"
+
+        - name: "Reboot linux-style hosts to apply changes"
+          when: ansible_net_os == "linux"
+          davidban77.gns3.gns3_node:
+            url: "{{ gns3_url }}"
+            project_name: "{{ gns3_project_name }}"
+            node_name: "{{ inventory_hostname }}"
+            state: reload
+            retry: yes
+            poll_wait_time: 30

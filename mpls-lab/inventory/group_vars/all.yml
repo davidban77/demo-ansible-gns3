@@ -1,0 +1,5 @@
+---
+syslog:
+  address: 10.70.70.44
+  protocol: udp
+  port: 5014

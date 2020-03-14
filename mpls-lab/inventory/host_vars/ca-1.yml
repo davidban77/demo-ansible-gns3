@@ -1,0 +1,5 @@
+interfaces:
+  - interface: Gi0/1
+    ip: 70.0.1.1/30
+  - interface: Gi0/2
+    ip: 70.0.2.1/30

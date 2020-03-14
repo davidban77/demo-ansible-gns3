@@ -1,0 +1,37 @@
+[client_a]
+ca-1  mgmt_ip=10.70.70.11/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+cae-1  mgmt_ip=10.70.70.12/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+cae-2  mgmt_ip=10.70.70.13/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+
+[client_b]
+cb-1  mgmt_ip=10.70.70.21/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+cbe-1  mgmt_ip=10.70.70.22/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+cbe-2  mgmt_ip=10.70.70.23/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+
+[clients:children]
+client_a
+client_b
+
+[service_provider_edge]
+pe-1  mgmt_ip=10.70.70.31/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+pe-2  mgmt_ip=10.70.70.32/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+pe-3  mgmt_ip=10.70.70.33/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+pe-4  mgmt_ip=10.70.70.34/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+
+[service_provider_core]
+p-1  mgmt_ip=10.70.70.35/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+p-2  mgmt_ip=10.70.70.36/24 mgmt_interface=GigabitEthernet0/0 ansible_net_os="ios" image_style="iosv_l3"
+
+[service_provider:children]
+service_provider_edge
+service_provider_core
+
+[mgmt_servers]
+netautomator-1  ansible_net_os="linux"
+
+[switches]
+switch-1  ansible_net_os="gns3_builtin"
+switch-2  ansible_net_os="gns3_builtin"
+
+[edge]
+cloud-1    ansible_net_os="gns3_builtin"
