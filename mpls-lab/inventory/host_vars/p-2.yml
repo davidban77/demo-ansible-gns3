@@ -1,0 +1,16 @@
+interfaces:
+  - interface: Gi0/4
+    description: to pe-3
+    ip: 10.0.19.2/30
+  - interface: Gi0/3
+    description: to p-1
+    ip: 10.0.15.2/30
+  - interface: Gi0/2
+    description: to pe-1
+    ip: 10.0.13.2/30
+  - interface: Gi0/1
+    description: to pe-2
+    ip: 10.0.12.2/30
+  - interface: Gi0/5
+    description: to pe-4
+    ip: 10.0.17.1/30

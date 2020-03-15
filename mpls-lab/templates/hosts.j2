@@ -1,0 +1,6 @@
+{% for device, value in hostvars.items() %}
+{% if "mgmt_ip" in value.keys() %}
+{{ device }}:      {{ value.mgmt_ip | ipaddr("address") }}
+{% endif %}
+{% endfor %}
+

@@ -1,7 +1,7 @@
 ---
 interfaces:
-    - interface: eth1
-      protocol: dhcp
-    - interface: eth0
-      protocol: static
-      ip: 10.70.70.44/24
+  - interface: eth1
+    protocol: dhcp
+  - interface: eth0
+    protocol: static
+    ip: 10.70.70.44/24

@@ -1,7 +1,10 @@
 interfaces:
   - interface: Gi0/2
+    description: to ca-1
     ip: 70.0.2.2/30
   - interface: Gi0/3
+    description: to cae-1
     ip: 70.0.3.2/30
   - interface: Gi0/4
+    description: to pe-2
     ip: 40.0.1.2/30
