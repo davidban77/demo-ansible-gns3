@@ -62,6 +62,11 @@
         - debug:
             msg: "{{ hostvars }}"
 
+        - name: testing template
+          template:
+            src: "templates/hosts.j2"
+            dest: "{{ playbook_dir }}/build/hosts"
+
     - name: Deploy boilerplate configuration
       when: boilerplate.config == "deploy" and ansible_net_os != "gns3_builtin"
       block:
@@ -120,7 +125,9 @@
             node_name: "{{ inventory_hostname }}"
             state: present
             dest: /etc/hosts
-            data: "{{ lookup('file', 'extra/hosts_file.conf') }}"
+            # data: "{{ lookup('file', 'extra/hosts_file.conf') }}"
+            data: "{{ lookup('template', 'templates/hosts.j2') }}"
+
 
         - name: "Reboot linux-style hosts to apply changes"
           when: ansible_net_os == "linux"

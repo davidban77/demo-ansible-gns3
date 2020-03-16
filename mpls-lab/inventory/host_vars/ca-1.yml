@@ -1,5 +1,7 @@
 interfaces:
   - interface: Gi0/1
+    description: to cae-1
     ip: 70.0.1.1/30
   - interface: Gi0/2
+    description: to cae-2
     ip: 70.0.2.1/30

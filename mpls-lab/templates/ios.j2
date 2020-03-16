@@ -34,6 +34,7 @@ no shutdown
 {% for interface in interfaces %}
 interface {{ interface.interface }}
 ip address {{ interface.ip | ipaddr('address') }} {{ interface.ip | ipaddr('netmask') }}
+description *** {{ interface.description }} ***
 no shut
 {% endfor %}
 {% endif %}
