@@ -43,7 +43,7 @@ def conn_link_tests(data):
 def main():
     ## inventory data
     data = (doc_read('../extra/hosts_file.conf'))
-    print(conn_link_tests(data))
+    pprint(conn_link_tests(data))
 
 main()
 
