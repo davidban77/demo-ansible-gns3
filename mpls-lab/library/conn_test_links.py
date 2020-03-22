@@ -25,7 +25,7 @@ def conn_link_tests(data):
     for host,mgmt_ip in data.items(): 
         host_response = {}
         # creating netmiko connector
-        net_connect = Netmiko(host, username="netops", password="netops123456",   device_type="cisco_ios",)
+        net_connect = Netmiko(mgmt_ip, username="netops", password="netops123456",   device_type="cisco_ios",)
 
         loc = "../inventory/host_vars/"+host+".yml"    
         parsed_host_data = doc_read(loc)
