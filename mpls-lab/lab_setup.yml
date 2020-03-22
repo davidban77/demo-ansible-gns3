@@ -42,9 +42,9 @@
     - davidban77.gns3
 
   tasks:
-    # - name: Retrieving nodes inventory information
-    #   set_fact:
-    #     nodes_inventory: "{{ hostvars['localhost']['nodes_inventory']['nodes_inventory'] }}"
+    - name: Retrieving nodes inventory information
+      set_fact:
+        nodes_inventory: "{{ hostvars['localhost']['nodes_inventory']['nodes_inventory'] }}"
 
     - name: Generate boilerplate config files
       when: boilerplate.config == "generate" and ansible_net_os != "gns3_builtin"
