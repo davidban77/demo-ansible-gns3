@@ -11,7 +11,7 @@ location = '../extra/hosts_file.conf'
 # reading yamls
 def doc_read(location):
     with open(location, 'r') as f:
-        data = yaml.load(f)
+        data = yaml.safe_load(f)
         return(data)
 
 # get Peer ip on the link --> address has to be of type IPNetwork
