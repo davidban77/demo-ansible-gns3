@@ -1,7 +1,7 @@
 # Krlosromero 20200321,test link connectivity
 import yaml
 import time
-from netmiko import Netmiko  #--> doesn't work on my local laptop
+from netmiko import Netmiko  
 from pprint import pprint
 from netaddr import IPNetwork
 
