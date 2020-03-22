@@ -21,7 +21,7 @@ def get_peer_ip(address):
             return host
 
 def conn_link_tests(data):
-    results = list()
+    results = dict()
     for host,mgmt_ip in data.items(): 
         host_response = {}
         # creating netmiko connector
@@ -37,7 +37,7 @@ def conn_link_tests(data):
                 time.sleep(2)
                 # testing with names, netmiko test will be from netautomator
                 # host_response.update({interface["interface"]:target})  
-        results.append(host_response)
+        results.update{host: host_response}
     return(results)
 
 def main():
