@@ -4,10 +4,13 @@ interfaces:
     ip: 40.0.1.1/30
   - interface: Gi0/3
     description: to pe-1
-    ip: 10.0.10.2/30
+    ip: 10.0.10.1/30
   - interface: Gi0/2
     description: to p-1
     ip: 10.0.14.2/30
   - interface: Gi0/1
     description: to p-2
     ip: 10.0.12.1/30
+  - interface: loopback0
+    description: loopback0
+    ip: 11.11.11.2/32
