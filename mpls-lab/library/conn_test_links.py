@@ -31,7 +31,7 @@ def conn_link_tests(data):
         parsed_host_data = doc_read(loc)
         # rurnning the test:
         for interface in parsed_host_data["interfaces"]:
-            if interface["description"] != "loopback0":
+            if interface["interface"] != "loopback0":
                 target = str(get_peer_ip(IPNetwork(interface["ip"])))
                 host_response.update({interface["interface"]:net_connect. send_command(f"ping {target}")})
                 time.sleep(2)
