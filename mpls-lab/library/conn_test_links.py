@@ -37,7 +37,7 @@ def conn_link_tests(data):
                 time.sleep(2)
                 # testing with names, netmiko test will be from netautomator
                 # host_response.update({interface["interface"]:target})  
-        results.update{host: host_response}
+        results.update({host: host_response})
     return(results)
 
 def main():
