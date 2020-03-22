@@ -8,7 +8,7 @@ from netaddr import IPNetwork
 # initial hosf location file --> it should be with args
 location = '../extra/hosts_file.conf'
 
-# reading ymls
+# reading yamls
 def doc_read(location):
     with open(location, 'r') as f:
         data = yaml.load(f)
@@ -33,7 +33,7 @@ def conn_link_tests(data):
         for interface in parsed_host_data["interfaces"]:
             if interface["description"] != "loopback":
                 target = str(get_peer_ip(IPNetwork(interface["ip"])))
-                host_response.update({interface["interface"]:net_connect. send_command(f"ping {target}"))
+                host_response.update({interface["interface"]:net_connect. send_command(f"ping {target}")})
                 time.sleep(2)
                 # testing with names, netmiko test will be from netautomator
                 # host_response.update({interface["interface"]:target})  
