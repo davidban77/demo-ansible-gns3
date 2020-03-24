@@ -1,28 +1,27 @@
 # Krlosromero 20200321,test link connectivity
 import yaml
 import time
-from netmiko import Netmiko  
+from netmiko import Netmiko
 from pprint import pprint
 from netaddr import IPNetwork
 from getpass import getpass
 
 # initial hosf location file --> it should be with args
-location = '../extra/hosts_file.conf'
+location = "../extra/hosts_file.conf"
 
-#getting net devices password
+# getting networks devices password --Assuming is the same for all the devices...
 while True:
-    pwd = getpass(prompt = "password for net devices ")
+    pwd = getpass(prompt="password for network devices:")
     if pwd != "":
-        print('Starting tests.............')
+        print("Starting tests.............")
         break
-
-pwd = getpass(prompt= "password for Net devices")
 
 # reading yamls
 def doc_read(location):
-    with open(location, 'r') as f:
+    with open(location, "r") as f:
         data = yaml.safe_load(f)
-        return(data)
+        return data
+
 
 # get Peer ip on the link --> address has to be of type IPNetwork
 def get_peer_ip(address):
@@ -30,35 +29,36 @@ def get_peer_ip(address):
         if address.ip != host:
             return host
 
+
 def conn_link_tests(data):
     results = dict()
-    for host,mgmt_ip in data.items(): 
+    for host, mgmt_ip in data.items():
         host_response = {}
         # creating netmiko connector
-        net_connect = Netmiko(mgmt_ip, username="netops", password=pwd,   device_type="cisco_ios",)
+        net_connect = Netmiko(
+            mgmt_ip, username="netops", password=pwd, device_type="cisco_ios",
+        )
 
-        loc = "../inventory/host_vars/"+host+".yml"    
+        loc = "../inventory/host_vars/" + host + ".yml"
         parsed_host_data = doc_read(loc)
         # rurnning the test:
         for interface in parsed_host_data["interfaces"]:
             if interface["interface"] != "loopback0":
                 target = str(get_peer_ip(IPNetwork(interface["ip"])))
-                host_response.update({interface["interface"]:net_connect. send_command(f"ping {target}")})
+                host_response.update(
+                    {interface["interface"]: net_connect.send_command(f"ping {target}")}
+                )
                 time.sleep(2)
                 # testing with names, netmiko test will be from netautomator
-                # host_response.update({interface["interface"]:target})  
+                # host_response.update({interface["interface"]:target})
         results.update({host: host_response})
-    return(results)
+    return results
+
 
 def main():
     ## inventory data
-    data = (doc_read('../extra/hosts_file.conf'))
+    data = doc_read("../extra/hosts_file.conf")
     pprint(conn_link_tests(data))
 
+
 main()
-
-
-
-
- 
-
