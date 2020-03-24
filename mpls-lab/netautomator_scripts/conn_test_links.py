@@ -1,11 +1,34 @@
-# Krlosromero 20200321,test link connectivity
-import yaml
-import time
-from netmiko import Netmiko
-from pprint import pprint
-from netaddr import IPNetwork
-from getpass import getpass
+#!/usr/bin/env python
 
+DOCUMENTATION = """
+---
+The scripts provide a connectivity link test by using Netmiko from netautomator to connect to the network devices and run ping test against their peers on each interface configured previously by Ansible.
+this script have to run from the netautomator after do a git clone to the repository.
+the script is intended to run from the folder/demo-ansible-gns3/mpls-lab/netautomator_scripts
+
+"""
+
+EXAMPLES = """
+# python conn_test_links.py
+"""
+
+RETURN = """
+A Dictionary with all the ping results from each interface per device as follows:
+password for network devices:
+Starting tests.............
+{'cae-1': {'Gi0/1': 'Type escape sequence to abort.\n'
+                    'Sending 5, 100-byte ICMP Echos to 70.0.0.1, timeout is 2 '
+                    'seconds:\n'
+                    '.!!!!\n'
+                    'Success rate is 80 percent (4/5), round-trip min/avg/max '
+                    '= 2/8/23 ms',
+           'Gi0/3': 'Type escape sequence to abort.\n'
+                    'Sending 5, 100-byte ICMP Echos to 70.0.3.2, timeout is 2 '
+                    'seconds:\n'
+                    '.!!!!\n'
+                    'Success rate is 80 percent (4/5), round-trip min/avg/max '
+                    '= 2/2/4 ms'
+"""
 # initial hosf location file --> it should be with args
 location = "../extra/hosts_file.conf"
 
@@ -21,7 +44,6 @@ def doc_read(location):
     with open(location, "r") as f:
         data = yaml.safe_load(f)
         return data
-
 
 # get Peer ip on the link --> address has to be of type IPNetwork
 def get_peer_ip(address):
@@ -60,5 +82,5 @@ def main():
     data = doc_read("../extra/hosts_file.conf")
     pprint(conn_link_tests(data))
 
-
-main()
+if __name__ == '__main__':
+    main()
