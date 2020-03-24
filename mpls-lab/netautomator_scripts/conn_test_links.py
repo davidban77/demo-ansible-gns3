@@ -2,10 +2,10 @@
 
 DOCUMENTATION = """
 ---
-The scripts provide a connectivity link test by using Netmiko from netautomator to connect to the network devices and run ping test against their peers on each interface configured previously by Ansible.
+The script provide a connectivity link test by using Netmiko from netautomator to connect to the network devices and run ping test against their peers on each interface configured previously by Ansible.
 this script have to run from the netautomator after do a git clone to the repository.
 the script is intended to run from the folder/demo-ansible-gns3/mpls-lab/netautomator_scripts
-
+reason for some hard-coded data in the code
 """
 
 EXAMPLES = """
