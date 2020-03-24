@@ -11,7 +11,7 @@ location = '../extra/hosts_file.conf'
 
 #getting net devices password
 while True:
-    pwd = getpass(prompt = "password for net devices")
+    pwd = getpass(prompt = "password for net devices ")
     if pwd != "":
         print('Starting tests.............')
         break
@@ -35,7 +35,7 @@ def conn_link_tests(data):
     for host,mgmt_ip in data.items(): 
         host_response = {}
         # creating netmiko connector
-        net_connect = Netmiko(mgmt_ip, username="netops", password="pwd",   device_type="cisco_ios",)
+        net_connect = Netmiko(mgmt_ip, username="netops", password=pwd,   device_type="cisco_ios",)
 
         loc = "../inventory/host_vars/"+host+".yml"    
         parsed_host_data = doc_read(loc)
