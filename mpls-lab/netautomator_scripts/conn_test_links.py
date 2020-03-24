@@ -4,9 +4,19 @@ import time
 from netmiko import Netmiko  
 from pprint import pprint
 from netaddr import IPNetwork
+from getpass import getpass
 
 # initial hosf location file --> it should be with args
 location = '../extra/hosts_file.conf'
+
+#getting net devices password
+while True:
+    pwd = getpass(prompt = "password for net devices")
+    if pwd != "":
+        print('Starting tests.............')
+        break
+
+pwd = getpass(prompt= "password for Net devices")
 
 # reading yamls
 def doc_read(location):
@@ -25,7 +35,7 @@ def conn_link_tests(data):
     for host,mgmt_ip in data.items(): 
         host_response = {}
         # creating netmiko connector
-        net_connect = Netmiko(mgmt_ip, username="netops", password="netops123456",   device_type="cisco_ios",)
+        net_connect = Netmiko(mgmt_ip, username="netops", password="pwd",   device_type="cisco_ios",)
 
         loc = "../inventory/host_vars/"+host+".yml"    
         parsed_host_data = doc_read(loc)
