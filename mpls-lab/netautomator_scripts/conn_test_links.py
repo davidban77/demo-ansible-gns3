@@ -89,5 +89,5 @@ def main():
     data = doc_read("../extra/hosts_file.conf")
     pprint(conn_link_tests(data))
 
-
-main()
+if __name__ == '__main__':
+    main()
