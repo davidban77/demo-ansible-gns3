@@ -29,7 +29,14 @@ Starting tests.............
                     'Success rate is 80 percent (4/5), round-trip min/avg/max '
                     '= 2/2/4 ms'
 """
-# initial hosf location file --> it should be with args
+import yaml
+import time
+from netmiko import Netmiko
+from pprint import pprint
+from netaddr import IPNetwork
+from getpass import getpass
+
+# initial hosf location file 
 location = "../extra/hosts_file.conf"
 
 # getting networks devices password --Assuming is the same for all the devices...
@@ -82,5 +89,5 @@ def main():
     data = doc_read("../extra/hosts_file.conf")
     pprint(conn_link_tests(data))
 
-if __name__ == '__main__':
-    main()
+
+main()
