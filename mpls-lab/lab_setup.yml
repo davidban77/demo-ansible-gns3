@@ -40,6 +40,16 @@
     - inventory/gns3_vars.yml
   collections:
     - davidban77.gns3
+  pre_tasks:
+    - name: check env vars
+      set_fact:
+        NETAUTOMATOR_IP: "{{ lookup('env', 'NETAUTOMATOR_IP') }}"
+        NETAUTOMATOR_PWD: "{{ lookup('env', 'NETAUTOMATOR_PWD') }}"
+        NETAUTOMATOR_USR: "{{ lookup('env', 'NETAUTOMATOR_USR') }}"
+    - name: fail if env vars not set
+      fail:
+        msg: "NETAUTOMATOR_IP env var not set. Run `source .env`"
+      when: NETAUTOMATOR_IP == ""
 
   tasks:
     - name: Retrieving nodes inventory information

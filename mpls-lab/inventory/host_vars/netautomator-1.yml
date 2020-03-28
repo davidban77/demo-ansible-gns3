@@ -1,7 +1,11 @@
 ---
 interfaces:
   - interface: eth1
-    protocol: dhcp
+    protocol: static
+    ip: "{{ NETAUTOMATOR_IP }}"
   - interface: eth0
     protocol: static
     ip: 10.70.70.44/24
+ansible_user: "{{ lookup('env', 'NETAUTOMATOR_USR') }}"
+ansible_password: "{{ lookup('env', 'NETAUTOMATOR_PWD') }}"
+ansible_host: "{{ lookup('env', 'NETAUTOMATOR_IP') | ipaddr('address') }}"
