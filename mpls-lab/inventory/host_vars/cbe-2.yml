@@ -8,3 +8,6 @@ interfaces:
   - interface: Gi0/1
     description: to pe-4
     ip: 40.0.3.2/30
+  - interface: loopback0
+    description: loopback
+    ip: 13.13.13.3/32

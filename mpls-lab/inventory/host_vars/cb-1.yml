@@ -5,3 +5,6 @@ interfaces:
   - interface: Gi0/2
     description: to cbe-2
     ip: 50.0.1.1/30
+  - interface: loopback0
+    description: loopback
+    ip: 13.13.13.1/32

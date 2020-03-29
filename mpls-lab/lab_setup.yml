@@ -30,16 +30,26 @@
       pause:
         minutes: "{{ boilerplate.automated_push_delay | default(3) }}"
 
-# Play that goes through the inventory devices to generate/push boiler plate config
+# # Play that goes through the inventory devices to generate/push boiler plate config
 - hosts: all
   gather_facts: no
   vars:
-     ansible_connection: local
-     ansible_python_interpreter: "{{ansible_playbook_python}}"
+    ansible_connection: local
+    ansible_python_interpreter: "{{ansible_playbook_python}}"
   vars_files:
     - inventory/gns3_vars.yml
   collections:
     - davidban77.gns3
+  pre_tasks:
+    - name: check env vars
+      set_fact:
+        NETAUTOMATOR_IP: "{{ lookup('env', 'NETAUTOMATOR_IP') }}"
+        NETAUTOMATOR_PWD: "{{ lookup('env', 'NETAUTOMATOR_PWD') }}"
+        NETAUTOMATOR_USR: "{{ lookup('env', 'NETAUTOMATOR_USR') }}"
+    - name: fail if env vars not set
+      fail:
+        msg: "NETAUTOMATOR_IP env var not set. Run `source .env`"
+      when: NETAUTOMATOR_IP == ""
 
   tasks:
     - name: Retrieving nodes inventory information
@@ -125,9 +135,8 @@
             node_name: "{{ inventory_hostname }}"
             state: present
             dest: /etc/hosts
-            # data: "{{ lookup('file', 'extra/hosts_file.conf') }}"
-            data: "{{ lookup('template', 'templates/hosts.j2') }}"
-
+            data: "{{ lookup('file', 'extra/hosts_file.conf') }}"
+            # data: "{{ lookup('template', 'templates/hosts.j2') }}"
 
         - name: "Reboot linux-style hosts to apply changes"
           when: ansible_net_os == "linux"

@@ -1,7 +1,7 @@
 interfaces:
   - interface: Gi0/4
-    description: to p-2
-    ip: 10.0.19.1/30
+    description: to p-1
+    ip: 10.0.18.2/30
   - interface: Gi0/3
     description: to pe-3
     ip: 10.0.20.2/30
@@ -11,3 +11,6 @@ interfaces:
   - interface: Gi0/5
     description: to p-2
     ip: 10.0.17.2/30
+  - interface: loopback0
+    description: loopback0
+    ip: 11.11.11.6/32

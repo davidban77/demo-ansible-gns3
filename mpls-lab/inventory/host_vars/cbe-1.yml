@@ -8,3 +8,6 @@ interfaces:
   - interface: Gi0/1
     description: to cb-1
     ip: 50.0.0.2/30
+  - interface: loopback0
+    description: loopback
+    ip: 13.13.13.2/32
