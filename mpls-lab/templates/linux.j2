@@ -8,7 +8,7 @@ iface {{ interface.interface }} inet {{ interface.protocol }}
   netmask {{ interface.ip | ipaddr('netmask') }}
 {% if interface.gw is defined %}
   gateway {{ interface.gw }}
-{%- endif %}
+{% endif %}
 {% if interface.dns is defined %}
   up echo nameserver {{ interface.dns }} > /etc/resolv.conf
 {%- endif %}

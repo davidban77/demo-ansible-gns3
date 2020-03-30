@@ -109,8 +109,8 @@ changed:
     description: If an action was executed
     type: bool
 """
-import time
-import traceback
+import time          # noqa: E402
+import traceback     # noqa: E402
 
 PEXPECT_IMP_ERR = None
 try:
@@ -121,9 +121,9 @@ except ImportError:
     PEXPECT_IMP_ERR = traceback.format_exc()
     HAS_PEXPECT = False
 
-from ansible.utils.display import Display
-from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible.errors import AnsibleError
+from ansible.utils.display import Display                                   # noqa: E402
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib  # noqa: E402
+from ansible.errors import AnsibleError                                     # noqa: E402
 
 GNS3FY_IMP_ERR = None
 try:

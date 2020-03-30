@@ -1,8 +1,20 @@
 ### Main playbook to setup or teardown a lab
 - name: Lab creation
-  import_playbook: lab_setup.yml
+  import_playbook: playbooks/lab_setup.yml
+  when: execute == "create"
+
+- name: Netautomator activation
+  import_playbook: playbooks/activate_netautomator.yml
+  when: execute == "create"
+
+- name: Netautomator setup
+  import_playbook: playbooks/setup_netautomator.yml
+  when: execute == "create"
+
+- name: Network devices test
+  import_playbook: playbooks/network_devices_test.yml
   when: execute == "create"
 
 - name: Lab destruction
-  import_playbook: lab_teardown.yml
+  import_playbook: playbooks/lab_teardown.yml
   when: execute == "delete"

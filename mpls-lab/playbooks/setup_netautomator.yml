@@ -1,0 +1,39 @@
+---
+- hosts: mgmt_servers
+
+  vars:
+    ansible_python_interpreter: "/opt/conda/bin/python"
+
+  tasks:
+    - name: Set authorized key for user on host
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '~/.ssh/netautomator/id_rsa.pub') }}"
+
+    - name: Set a workspace for the files
+      file:
+        path: /root/workspace
+        state: directory
+
+    - name: sync repository to workspace
+      synchronize:
+        src: "{{ playbook_dir }}/.."
+        dest: /root/workspace
+
+    - name: install requirements
+      pip:
+        requirements: /root/workspace/scripts/requirements.txt
+        state: present
+
+    - name: run connection validation script
+      command:
+        cmd: "{{ ansible_python_interpreter }} conn_test_links.py"
+        chdir: "/root/workspace/scripts"
+      environment:
+        NET_DEVICE_USER: "{{ lookup('env', 'NET_DEVICE_USER') }}"
+        NET_DEVICE_PASSWORD: "{{ lookup('env', 'NET_DEVICE_PASSWORD') }}"
+      register: result
+
+    - debug:
+        msg: "{{ result.stdout }}"

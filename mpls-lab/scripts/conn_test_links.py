@@ -1,18 +1,17 @@
 #!/usr/bin/env python
-
-DOCUMENTATION = """
+"""
 ---
-The script provide a connectivity link test by using Netmiko from netautomator to connect to the network devices and run ping test against their peers on each interface configured previously by Ansible.
+The script provide a connectivity link test by using Netmiko from netautomator to
+connect to the network devices and run ping test against their peers on each interface
+ configured previously by Ansible.
 this script have to run from the netautomator after do a git clone to the repository.
-the script is intended to run from the folder/demo-ansible-gns3/mpls-lab/netautomator_scripts
+the script is intended to run from the folder/demo-ansible-gns3/mpls-lab/
+netautomator_scripts
 reason for some hard-coded data in the code
-"""
 
-EXAMPLES = """
+Example:
 # python conn_test_links.py
-"""
 
-RETURN = """
 A Dictionary with all the ping results from each interface per device as follows:
 password for network devices:
 Starting tests.............
@@ -29,28 +28,32 @@ Starting tests.............
                     'Success rate is 80 percent (4/5), round-trip min/avg/max '
                     '= 2/2/4 ms'
 """
+import os
 import yaml
-import time
 from netmiko import Netmiko
-from pprint import pprint
 from netaddr import IPNetwork
-from getpass import getpass
+from getpass import getpass, getuser
+from tabulate import tabulate
 
-# initial hosf location file 
-location = "../extra/hosts_file.conf"
+NET_DEVICE_USER = os.getenv("NET_DEVICE_USER")
+NET_DEVICE_PASSWORD = os.getenv("NET_DEVICE_PASSWORD")
 
-# getting networks devices password --Assuming is the same for all the devices...
-while True:
-    pwd = getpass(prompt="password for network devices:")
-    if pwd != "":
-        print("Starting tests.............")
-        break
 
-# reading yamls
+def get_creds():
+    user = NET_DEVICE_USER if NET_DEVICE_USER is not None else getuser()
+    pwd = (
+        NET_DEVICE_PASSWORD
+        if NET_DEVICE_PASSWORD is not None
+        else getpass(prompt="password for network devices:")
+    )
+    return user, pwd
+
+
 def doc_read(location):
     with open(location, "r") as f:
         data = yaml.safe_load(f)
         return data
+
 
 # get Peer ip on the link --> address has to be of type IPNetwork
 def get_peer_ip(address):
@@ -60,12 +63,12 @@ def get_peer_ip(address):
 
 
 def conn_link_tests(data):
-    results = dict()
+    user, pwd = get_creds()
     for host, mgmt_ip in data.items():
-        host_response = {}
+        host_response = []
         # creating netmiko connector
         net_connect = Netmiko(
-            mgmt_ip, username="netops", password=pwd, device_type="cisco_ios",
+            mgmt_ip, username=user, password=pwd, device_type="cisco_ios",
         )
 
         loc = "../inventory/host_vars/" + host + ".yml"
@@ -74,20 +77,20 @@ def conn_link_tests(data):
         for interface in parsed_host_data["interfaces"]:
             if interface["interface"] != "loopback0":
                 target = str(get_peer_ip(IPNetwork(interface["ip"])))
-                host_response.update(
-                    {interface["interface"]: net_connect.send_command(f"ping {target}")}
+                host_response.append(
+                    {
+                        "Interface": interface["interface"],
+                        "Response": net_connect.send_command(f"ping {target}")
+                    }
                 )
-                time.sleep(2)
-                # testing with names, netmiko test will be from netautomator
-                # host_response.update({interface["interface"]:target})
-        results.update({host: host_response})
-    return results
+        print(f"\n{'#' * 20} DEVICE: {host} {'#' * 20}\n")
+        print(tabulate(host_response, "keys"))
 
 
 def main():
-    ## inventory data
     data = doc_read("../extra/hosts_file.conf")
-    pprint(conn_link_tests(data))
+    conn_link_tests(data)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
