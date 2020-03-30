@@ -1,0 +1,33 @@
+---
+- hosts: mgmt_servers
+  connection: local
+  gather_facts: no
+  vars_files:
+    - ../inventory/gns3_vars.yml
+
+  vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  collections:
+    - davidban77.gns3
+
+  tasks:
+    - name: Collect the nodes inventory
+      gns3_nodes_inventory:
+        url: "{{ gns3_url }}"
+        project_name: "{{ gns3_project_name }}"
+      register: nodes_inventory
+
+    - name: setting the console
+      set_fact:
+        server: "{{ nodes_inventory['nodes_inventory'][inventory_hostname]['server'] }}"
+        port: "{{ nodes_inventory['nodes_inventory'][inventory_hostname]['console_port'] }}"
+
+    - name: send ping commands for netautomator over console
+      expect:
+        command: "telnet {{ server }} {{ port }}"
+        echo: yes
+        timeout: 60
+        responses:
+          'root\@netautomator\-1': "{{ expect_commands }}"
+      ignore_errors: yes

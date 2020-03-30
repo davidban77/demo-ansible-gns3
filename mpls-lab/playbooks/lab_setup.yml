@@ -2,9 +2,15 @@
 - hosts: localhost
   gather_facts: no
   vars_files:
-    - inventory/gns3_vars.yml
+    - ../inventory/gns3_vars.yml
   collections:
     - davidban77.gns3
+
+  pre_tasks:
+    - name: fail if env vars not set
+      fail:
+        msg: "NETAUTOMATOR_PREFIX env var not set. Run `source .env`"
+      when: lookup('env', 'NETAUTOMATOR_PREFIX') == ""
 
   tasks:
     - name: Lab creation and setup
@@ -30,26 +36,22 @@
       pause:
         minutes: "{{ boilerplate.automated_push_delay | default(3) }}"
 
-# # Play that goes through the inventory devices to generate/push boiler plate config
+# Play that goes through the inventory devices to generate/push boiler plate config
 - hosts: all
   gather_facts: no
   vars:
     ansible_connection: local
     ansible_python_interpreter: "{{ansible_playbook_python}}"
   vars_files:
-    - inventory/gns3_vars.yml
+    - ../inventory/gns3_vars.yml
   collections:
     - davidban77.gns3
+
   pre_tasks:
-    - name: check env vars
-      set_fact:
-        NETAUTOMATOR_IP: "{{ lookup('env', 'NETAUTOMATOR_IP') }}"
-        NETAUTOMATOR_PWD: "{{ lookup('env', 'NETAUTOMATOR_PWD') }}"
-        NETAUTOMATOR_USR: "{{ lookup('env', 'NETAUTOMATOR_USR') }}"
     - name: fail if env vars not set
       fail:
-        msg: "NETAUTOMATOR_IP env var not set. Run `source .env`"
-      when: NETAUTOMATOR_IP == ""
+        msg: "NETAUTOMATOR_PREFIX env var not set. Run `source .env`"
+      when: lookup('env', 'NETAUTOMATOR_PREFIX') == ""
 
   tasks:
     - name: Retrieving nodes inventory information
@@ -61,28 +63,28 @@
       block:
         - name: Create build folder
           file:
-            path: "{{ playbook_dir }}/build"
+            path: "{{ playbook_dir }}/../build"
             state: directory
 
         - name: Generate config
           template:
-            src: templates/{{ ansible_net_os }}.j2
-            dest: "{{ playbook_dir }}/build/{{ inventory_hostname }}-{{ ansible_net_os }}.conf"
+            src: ../templates/{{ ansible_net_os }}.j2
+            dest: "{{ playbook_dir }}/../build/{{ inventory_hostname }}-{{ ansible_net_os }}.conf"
 
         - debug:
             msg: "{{ hostvars }}"
 
         - name: testing template
           template:
-            src: "templates/hosts.j2"
-            dest: "{{ playbook_dir }}/build/hosts"
+            src: "../templates/hosts.j2"
+            dest: "{{ playbook_dir }}/../build/hosts"
 
     - name: Deploy boilerplate configuration
       when: boilerplate.config == "deploy" and ansible_net_os != "gns3_builtin"
       block:
         - name: Generate configuration variable
           set_fact:
-            boilerplate_config: "{{ lookup('template', 'templates/{{ ansible_net_os }}.j2') }}"
+            boilerplate_config: "{{ lookup('template', '../templates/{{ ansible_net_os }}.j2') }}"
 
         - name: "Push config"
           when: ansible_net_os == "ios" and image_style == "iosv_l3"
@@ -135,8 +137,8 @@
             node_name: "{{ inventory_hostname }}"
             state: present
             dest: /etc/hosts
-            data: "{{ lookup('file', 'extra/hosts_file.conf') }}"
-            # data: "{{ lookup('template', 'templates/hosts.j2') }}"
+            data: "{{ lookup('file', '../extra/hosts_file.conf') }}"
+            # data: "{{ lookup('template', '../templates/hosts.j2') }}"
 
         - name: "Reboot linux-style hosts to apply changes"
           when: ansible_net_os == "linux"

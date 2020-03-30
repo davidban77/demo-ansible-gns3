@@ -1,15 +1,16 @@
+ansible_host: "{{ mgmt_ip | ipaddr('address') }}"
 interfaces:
   - interface: Gi0/4
-    description: to p-2
+    description: to lab-p-2
     ip: 10.0.19.1/30
   - interface: Gi0/3
-    description: to pe-4
+    description: to lab-pe-4
     ip: 10.0.20.1/30
   - interface: Gi0/2
-    description: to cbe-1
+    description: to lab-cbe-1
     ip: 40.0.2.1/30
   - interface: Gi0/5
-    description: to p-1
+    description: to lab-p-1
     ip: 10.0.16.2/30
   - interface: loopback0
     description: loopback0

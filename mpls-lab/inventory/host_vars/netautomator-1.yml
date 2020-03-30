@@ -1,11 +1,18 @@
 ---
+ansible_user: "{{ lookup('env', 'NETAUTOMATOR_USR') }}"
+ansible_password: "{{ lookup('env', 'NETAUTOMATOR_PWD') }}"
+ansible_host: "{{ lookup('env', 'NETAUTOMATOR_PREFIX') | ipaddr('address') }}"
 interfaces:
   - interface: eth1
     protocol: static
-    ip: "{{ NETAUTOMATOR_IP }}"
+    ip: "{{ lookup('env', 'NETAUTOMATOR_PREFIX') }}"
+    gw: "{{ lookup('env', 'NETAUTOMATOR_PREFIX') | ipaddr('1') | ipaddr('address') }}"
+    dns: "{{ lookup('env', 'NETAUTOMATOR_DNS') }}"
   - interface: eth0
     protocol: static
     ip: 10.70.70.44/24
-ansible_user: "{{ lookup('env', 'NETAUTOMATOR_USR') }}"
-ansible_password: "{{ lookup('env', 'NETAUTOMATOR_PWD') }}"
-ansible_host: "{{ lookup('env', 'NETAUTOMATOR_IP') | ipaddr('address') }}"
+
+expect_commands:
+  - ping {{ lookup('env', 'NETAUTOMATOR_NEIGH_1') }} -c 3
+  - ping {{ lookup('env', 'NETAUTOMATOR_NEIGH_2') }} -c 3
+  - ping {{ lookup('env', 'NETAUTOMATOR_PREFIX') | ipaddr('1') | ipaddr('address') }} -c 3
