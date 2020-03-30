@@ -9,11 +9,11 @@ Most of the projects in this repository have the below requirements:
 - Python package `gns3fy`, `pexpect` and `netaddr`
 - Ansible collections [`davidban77.gns3`](https://galaxy.ansible.com/davidban77/gns3)
 
-## Part 1:
+## Part 1
 
 [Basic scenario](https://davidban77.hashnode.dev/automate-your-network-labs-with-ansible-and-gns3-part-1-ck15f0bze000byos1q11xev5c)
 
-## Part 2:
+## Part 2
 
 [Automated configuration](https://davidban77.hashnode.dev/automate-your-network-labs-with-ansible-and-gns3-part-1-ck15f0bze000byos1q11xev5c)
 
