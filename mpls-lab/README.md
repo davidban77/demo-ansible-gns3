@@ -34,6 +34,12 @@ cd mpls-lab/
 source .env
 ```
 
+### DNS Entries
+
+Also for the **netautomator** container setup to work you need to specify an entry on your `/etc/hosts` file, or have a DNS entry for it.
+
+The same goes for the GNS3 server which is set as `dev_gns3server`.
+
 ## Requirements
 
 - Python 3.6 or above
